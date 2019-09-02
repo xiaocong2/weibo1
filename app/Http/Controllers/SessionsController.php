@@ -1,4 +1,7 @@
 <?php
+/**
+ * 登陆/退出登录控制器
+ */
 
 namespace App\Http\Controllers;
 
@@ -32,5 +35,16 @@ class SessionsController extends Controller
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back()->withInput();
         }
+    }
+
+    /**
+     * 退出登录
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy()
+    {
+        Auth::logout();
+        session()->flash('success','您已成功退出！');
+        return redirect('login');
     }
 }
