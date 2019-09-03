@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        //验证登录操作方法
+        $this->middleware('auth',[
+            'except'    => ['show','create','store','index']
+        ]);
+        //只允许未登录用户访问
+        $this->middleware('guest',[
+            'only'      => ['create']
+        ]);
+    }
+
+    /**
+     * 显示用户列表页
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index',compact('users'));
+    }
+
     /**
      * 显示注册页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -61,11 +83,21 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
         return view('users.edit',compact('user'));
     }
 
+    /**
+     * 更新个人资料
+     * @param User $user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function update(User $user,Request $request)
     {
+
+        $this->authorize('update', $user);//授权策略(判断是否是在更新自己的信息)
         //验证信息
         $this->validate($request,[
             'name'      => 'required|max:50',
@@ -83,7 +115,6 @@ class UsersController extends Controller
         session()->flash('success',"个人资料更新成功！");
 
         return redirect()->route('users.show',$user);
-
 
     }
 }
