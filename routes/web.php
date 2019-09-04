@@ -29,3 +29,5 @@ Route::resource('users','UsersController');//用户操作（增删改查）
 Route::get('login', 'SessionsController@create')->name('login');//显示登录页
 Route::post('login', 'SessionsController@store')->name('login');//用户登录操作
 Route::delete('logout', 'SessionsController@destroy')->name('logout');//退出登录
+
+Route::resource('statuses','StatusesController',['only' => ['store','destroy']]);//store发布微博  destroy删除微博
