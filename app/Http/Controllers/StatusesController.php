@@ -4,6 +4,7 @@
  */
 namespace App\Http\Controllers;
 
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -32,6 +33,21 @@ class StatusesController extends Controller
         ]);
 
         session()->flash('success',"发布成功");
+        return redirect()->back();
+    }
+
+    /**
+     * 删除用户
+     * @param Status $status
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Status $status)
+    {
+        //判断删除用户是否是微博发布者id
+        $this->authorize('destroy',$status);
+        $status->delete();
+        session()->flash('success',"微博被成功删除");
         return redirect()->back();
     }
 }
