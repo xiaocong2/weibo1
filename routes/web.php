@@ -33,3 +33,6 @@ Route::post('login', 'SessionsController@store')->name('login');//用户登录�
 Route::delete('logout', 'SessionsController@destroy')->name('logout');//退出登录
 
 Route::resource('statuses','StatusesController',['only' => ['store','destroy']]);//store发布微博  destroy删除微博
+
+Route::post('/users/followers/{user}','FollowersController@store')->name('followers.store');//关注用户
+Route::delete('/users/followers/{user}','FollowersController@destroy')->name('followers.destroy');//取消关注用户
